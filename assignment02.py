@@ -180,8 +180,7 @@ plt.show()
 ##    plt.ylabel('petal width [standardized]')
 ##    plt.legend(loc='upper left')
 ##    plt.show()
-    
-
+from sklearn import metrics
 from sklearn.neighbors import KNeighborsClassifier
 #try K=1 through K=25 and record testing accuracy
 k_range=range(1,26)
@@ -195,3 +194,6 @@ print(scores)
 #    print(scores.append(metrics.accuracy_score(y_test,y_pred)))
       
 
+print("My name is RENJIE HU")
+print("My NetID is: 659740767")
+print("I hereby certify that I have read the University policy on Academic Integrity and that I am not in violation.")
