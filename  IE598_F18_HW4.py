@@ -205,136 +205,160 @@ print('R^2 train: %.3f, test: %.3f' % (
         r2_score(y_train, y_train_pred),
         r2_score(y_test, y_test_pred)))
 
+#define a float list
+def floatrange(start,stop,steps):
+    ''' Computes a range of floating value.
+        
+        Input:
+            start (float)  : Start value.
+            end   (float)  : End value
+            steps (integer): Number of values
+        
+        Output:
+            A list of floats
+        
+        Example:
+            >>> print floatrange(0.25, 1.3, 5)
+            [0.25, 0.51249999999999996, 0.77500000000000002, 1.0375000000000001, 1.3]
+    '''
+    return [start+float(i)*(stop-start)/(float(steps)-1) for i in range(steps)]
+print(floatrange(0.25, 1.3, 5))
+
 #
 #Using regularized methods for regression
 #Lasso
 from sklearn.linear_model import Lasso
 X = df.iloc[:, :-1].values
 y = df['MEDV'].values
-lasso = Lasso(alpha=0.1)
-lasso.fit(X_train, y_train)
-y_train_pred = lasso.predict(X_train)
-y_test_pred = lasso.predict(X_test)
-print(lasso.coef_)
-print('MSE train: %.3f, test: %.3f' % (
-        mean_squared_error(y_train, y_train_pred),
-        mean_squared_error(y_test, y_test_pred)))
-print('R^2 train: %.3f, test: %.3f' % (
-        r2_score(y_train, y_train_pred),
-        r2_score(y_test, y_test_pred)))
-#print residual plot for Lasso
-ary = np.array(range(100000))
-np.linalg.norm(ary)
-sp.linalg.norm(ary)
-np.sqrt(np.sum(ary**2))
-plt.scatter(y_train_pred,  y_train_pred - y_train,
-            c='steelblue', marker='o', edgecolor='white',
-            label='Training data')
-plt.scatter(y_test_pred,  y_test_pred - y_test,
-            c='limegreen', marker='s', edgecolor='white',
-            label='Test data')
-plt.xlabel('Predicted values')
-plt.ylabel('Residuals')
-plt.legend(loc='upper left')
-plt.hlines(y=0, xmin=-10, xmax=50, color='black', lw=2)
-plt.xlim([-10, 50])
-plt.tight_layout()
-# plt.savefig('images/10_09.png', dpi=300)
-plt.show()
-from sklearn.metrics import r2_score
-from sklearn.metrics import mean_squared_error
 
-print('MSE train: %.3f, test: %.3f' % (
-        mean_squared_error(y_train, y_train_pred),
-        mean_squared_error(y_test, y_test_pred)))
-print('R^2 train: %.3f, test: %.3f' % (
-        r2_score(y_train, y_train_pred),
-        r2_score(y_test, y_test_pred)))
+for n in floatrange(0.1,0.5,5):
+     
+    lasso = Lasso(alpha=n)
+    lasso.fit(X_train, y_train)
+    y_train_pred = lasso.predict(X_train)
+    y_test_pred = lasso.predict(X_test)
+    #print(lasso.coef_)
+    #print('MSE train: %.3f, test: %.3f' % (
+    #        mean_squared_error(y_train, y_train_pred),
+    #        mean_squared_error(y_test, y_test_pred)))
+    #print('R^2 train: %.3f, test: %.3f' % (
+    #        r2_score(y_train, y_train_pred),
+    #        r2_score(y_test, y_test_pred)))
+    #print residual plot for Lasso
+    ary = np.array(range(100000))
+    np.linalg.norm(ary)
+    sp.linalg.norm(ary)
+    np.sqrt(np.sum(ary**2))
+    plt.scatter(y_train_pred,  y_train_pred - y_train,
+                c='steelblue', marker='o', edgecolor='white',
+                label='Training data')
+    plt.scatter(y_test_pred,  y_test_pred - y_test,
+                c='limegreen', marker='s', edgecolor='white',
+                label='Test data')
+    plt.xlabel('Predicted values')
+    plt.ylabel('Residuals(Lasso)')
+    plt.legend(loc='upper left')
+    plt.hlines(y=0, xmin=-10, xmax=50, color='black', lw=2)
+    plt.xlim([-10, 50])
+    plt.tight_layout()
+    # plt.savefig('images/10_09.png', dpi=300)
+    plt.show()
+    from sklearn.metrics import r2_score
+    from sklearn.metrics import mean_squared_error
+    
+    print('MSE train: %.3f, test: %.3f' % (
+            mean_squared_error(y_train, y_train_pred),
+            mean_squared_error(y_test, y_test_pred)))
+    print('R^2 train: %.3f, test: %.3f' % (
+            r2_score(y_train, y_train_pred),
+            r2_score(y_test, y_test_pred)))
 
 
 #Ridge
 from sklearn.linear_model import Ridge
-ridge = Ridge(alpha=1.0)
-X = df.iloc[:, :-1].values
-y = df['MEDV'].values
-ridge.fit(X_train, y_train)
-y_train_pred = ridge.predict(X_train)
-y_test_pred = ridge.predict(X_test)
-print('MSE train: %.3f, test: %.3f' % (
-        mean_squared_error(y_train, y_train_pred),
-        mean_squared_error(y_test, y_test_pred)))
-print('R^2 train: %.3f, test: %.3f' % (
-        r2_score(y_train, y_train_pred),
-        r2_score(y_test, y_test_pred)))
-ary = np.array(range(100000))
-np.linalg.norm(ary)
-sp.linalg.norm(ary)
-np.sqrt(np.sum(ary**2))
-plt.scatter(y_train_pred,  y_train_pred - y_train,
-            c='steelblue', marker='o', edgecolor='white',
-            label='Training data')
-plt.scatter(y_test_pred,  y_test_pred - y_test,
-            c='limegreen', marker='s', edgecolor='white',
-            label='Test data')
-plt.xlabel('Predicted values')
-plt.ylabel('Residuals')
-plt.legend(loc='upper left')
-plt.hlines(y=0, xmin=-10, xmax=50, color='black', lw=2)
-plt.xlim([-10, 50])
-plt.tight_layout()
-# plt.savefig('images/10_09.png', dpi=300)
-plt.show()
-from sklearn.metrics import r2_score
-from sklearn.metrics import mean_squared_error
-
-print('MSE train: %.3f, test: %.3f' % (
-        mean_squared_error(y_train, y_train_pred),
-        mean_squared_error(y_test, y_test_pred)))
-print('R^2 train: %.3f, test: %.3f' % (
-        r2_score(y_train, y_train_pred),
-        r2_score(y_test, y_test_pred)))
+for n in floatrange(0.1,0.5,5):
+    ridge = Ridge(alpha=n)
+    X = df.iloc[:, :-1].values
+    y = df['MEDV'].values
+    ridge.fit(X_train, y_train)
+    y_train_pred = ridge.predict(X_train)
+    y_test_pred = ridge.predict(X_test)
+    #print('MSE train: %.3f, test: %.3f' % (
+    #        mean_squared_error(y_train, y_train_pred),
+    #        mean_squared_error(y_test, y_test_pred)))
+    #print('R^2 train: %.3f, test: %.3f' % (
+    #        r2_score(y_train, y_train_pred),
+    #        r2_score(y_test, y_test_pred)))
+    ary = np.array(range(100000))
+    np.linalg.norm(ary)
+    sp.linalg.norm(ary)
+    np.sqrt(np.sum(ary**2))
+    plt.scatter(y_train_pred,  y_train_pred - y_train,
+                c='steelblue', marker='o', edgecolor='white',
+                label='Training data')
+    plt.scatter(y_test_pred,  y_test_pred - y_test,
+                c='limegreen', marker='s', edgecolor='white',
+                label='Test data')
+    plt.xlabel('Predicted values')
+    plt.ylabel('Residuals(Ridge)')
+    plt.legend(loc='upper left')
+    plt.hlines(y=0, xmin=-10, xmax=50, color='black', lw=2)
+    plt.xlim([-10, 50])
+    plt.tight_layout()
+    # plt.savefig('images/10_09.png', dpi=300)
+    plt.show()
+    from sklearn.metrics import r2_score
+    from sklearn.metrics import mean_squared_error
+    
+    print('MSE train: %.3f, test: %.3f' % (
+            mean_squared_error(y_train, y_train_pred),
+            mean_squared_error(y_test, y_test_pred)))
+    print('R^2 train: %.3f, test: %.3f' % (
+            r2_score(y_train, y_train_pred),
+            r2_score(y_test, y_test_pred)))
 
 #ElasticNet
 from sklearn.linear_model import ElasticNet
-elanet = ElasticNet(alpha=1.0, l1_ratio=0.5)
-X = df.iloc[:, :-1].values
-y = df['MEDV'].values
-elanet.fit(X_train, y_train)
-y_train_pred = elanet.predict(X_train)
-y_test_pred = elanet.predict(X_test)
-print('MSE train: %.3f, test: %.3f' % (
-        mean_squared_error(y_train, y_train_pred),
-        mean_squared_error(y_test, y_test_pred)))
-print('R^2 train: %.3f, test: %.3f' % (
-        r2_score(y_train, y_train_pred),
-        r2_score(y_test, y_test_pred)))
-ary = np.array(range(100000))
-np.linalg.norm(ary)
-sp.linalg.norm(ary)
-np.sqrt(np.sum(ary**2))
-plt.scatter(y_train_pred,  y_train_pred - y_train,
-            c='steelblue', marker='o', edgecolor='white',
-            label='Training data')
-plt.scatter(y_test_pred,  y_test_pred - y_test,
-            c='limegreen', marker='s', edgecolor='white',
-            label='Test data')
-plt.xlabel('Predicted values')
-plt.ylabel('Residuals')
-plt.legend(loc='upper left')
-plt.hlines(y=0, xmin=-10, xmax=50, color='black', lw=2)
-plt.xlim([-10, 50])
-plt.tight_layout()
-# plt.savefig('images/10_09.png', dpi=300)
-plt.show()
-from sklearn.metrics import r2_score
-from sklearn.metrics import mean_squared_error
-
-print('MSE train: %.3f, test: %.3f' % (
-        mean_squared_error(y_train, y_train_pred),
-        mean_squared_error(y_test, y_test_pred)))
-print('R^2 train: %.3f, test: %.3f' % (
-        r2_score(y_train, y_train_pred),
-        r2_score(y_test, y_test_pred)))
+for n in floatrange(0.1,0.5,5):
+    elanet = ElasticNet(alpha=n, l1_ratio=0.5)
+    X = df.iloc[:, :-1].values
+    y = df['MEDV'].values
+    elanet.fit(X_train, y_train)
+    y_train_pred = elanet.predict(X_train)
+    y_test_pred = elanet.predict(X_test)
+    #print('MSE train: %.3f, test: %.3f' % (
+    #        mean_squared_error(y_train, y_train_pred),
+    #        mean_squared_error(y_test, y_test_pred)))
+    #print('R^2 train: %.3f, test: %.3f' % (
+    #        r2_score(y_train, y_train_pred),
+    #        r2_score(y_test, y_test_pred)))
+    ary = np.array(range(100000))
+    np.linalg.norm(ary)
+    sp.linalg.norm(ary)
+    np.sqrt(np.sum(ary**2))
+    plt.scatter(y_train_pred,  y_train_pred - y_train,
+                c='steelblue', marker='o', edgecolor='white',
+                label='Training data')
+    plt.scatter(y_test_pred,  y_test_pred - y_test,
+                c='limegreen', marker='s', edgecolor='white',
+                label='Test data')
+    plt.xlabel('Predicted values')
+    plt.ylabel('Residuals(ElasticNet)')
+    plt.legend(loc='upper left')
+    plt.hlines(y=0, xmin=-10, xmax=50, color='black', lw=2)
+    plt.xlim([-10, 50])
+    plt.tight_layout()
+    # plt.savefig('images/10_09.png', dpi=300)
+    plt.show()
+    from sklearn.metrics import r2_score
+    from sklearn.metrics import mean_squared_error
+    
+    print('MSE train: %.3f, test: %.3f' % (
+            mean_squared_error(y_train, y_train_pred),
+            mean_squared_error(y_test, y_test_pred)))
+    print('R^2 train: %.3f, test: %.3f' % (
+            r2_score(y_train, y_train_pred),
+            r2_score(y_test, y_test_pred)))
 
 
 print("My name is RENJIE HU")
@@ -342,3 +366,6 @@ print("My NetID is: renjieh2")
 print("I hereby certify that "
       "I have read the University policy on Academic Integrity" 
       "and that I am not in violation.")
+
+
+
